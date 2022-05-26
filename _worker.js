@@ -1,18 +1,12 @@
 export default {
-  async fetch(request, env) {
-    const day1 = 'sanditable.herokuapp.com';
-    const day2 = 'threetables.herokuapp.com';
-    let url = new URL(request.url);
-    if (url.pathname.startsWith('/')) {
-      let day = new Date();
-      if (day.getDay() % 2) {
-        url.hostname = day1;
-      } else {
-        url.hostname = day2;
+    async fetch(request, env) {
+      let url = new URL(request.url);
+      if (url.pathname.startsWith('/')) {
+        url.hostname="threetables.herokuapp.com";
+        let new_request=new Request(url,request);
+        return fetch(new_request);
       }
-      let new_request = new Request(url, request);
-      return fetch(new_request);
+      // Otherwise, serve the static assets.
+      return env.ASSETS.fetch(request);
     }
-    return env.ASSETS.fetch(request);
-  },
-};
+  };
